@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const router = require("./server/routes.js");
 
 const app = express();
 
@@ -8,6 +9,8 @@ app.use(express.json());
 
 //middleware for logging HTTP request and their methods
 app.use(morgan("dev"));
+
+app.use("/movies", router);
 
 //a testing route to see if the server is working correctly
 app.get("/test", (req, res, next) => {
@@ -18,7 +21,7 @@ app.get("/test", (req, res, next) => {
   }
 });
 
-// Handle client errors (e.g., when the user requests a non-existent route).
+// Handle client side errors (e.g., when the user requests a non-existent route).
 app.use((req, res, next) => {
   try {
     res.status(404).json({ msg: "Client Error. The Route doesn't exist" });
