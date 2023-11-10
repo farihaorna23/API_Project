@@ -13,14 +13,11 @@ const addNew = async movie => {
 };
 
 const updateMovie = async (updatedInfo, movieID) => {
-  return await query("UPDATE Movie SET ? WHERE movieID = ?", [
-    updatedInfo,
-    movieID
-  ]);
+  return await query("UPDATE Movie SET ? WHERE id = ?", [updatedInfo, movieID]);
 };
 
 const deleteMovie = async movieID => {
-  return await query("DELETE FROM Movie WHERE movieID = ?", [movieID]);
+  return await query("DELETE FROM Movie WHERE id = ?", [movieID]);
 };
 
 module.exports = {
