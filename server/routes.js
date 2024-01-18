@@ -3,27 +3,38 @@ const {
   findAll,
   addNew,
   updateMovie,
-  deleteMovie
+  deleteMovie,
+  getLog
 } = require("./query.js");
 const express = require("express");
-
+//creating a router object from express to handle route specific logic
 const router = express.Router();
+
+router.get("/log", async (req, res, next) => {
+  try {
+    const data = await getLog();
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
 
 //this get method will send all the movie data if no id is given but if an id is given, it will send  all of the information of that movie id
 router.get("/:id?", async (req, res, next) => {
   const { id } = req.params;
-  let data;
 
   try {
     if (id) {
-      if (isNaN(parseInt(id))) {
-        res.status(400).json({ msg: "Invalid Id" });
+      const parsedID = parseInt(id);
+      if (isNaN(parsedID)) {
+        return res.status(400).json({ msg: "Invalid Id" });
       }
-      data = await findOne(parseInt(id));
+      const data = await findOne(parsedID);
+      res.json(data);
     } else {
-      data = await findAll();
+      const data = await findAll();
+      res.json(data);
     }
-    res.json(data);
   } catch (error) {
     next(error);
   }

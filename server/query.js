@@ -20,10 +20,32 @@ const deleteMovie = async movieID => {
   return await query("DELETE FROM Movie WHERE id = ?", [movieID]);
 };
 
+const addLog = async logininfo => {
+  const queryStr = `INSERT INTO requestInfo (timestamp, method, endpoint, status) VALUES (?,?,?,?)`;
+  const values = [
+    logininfo.timeStamp,
+    logininfo.method,
+    logininfo.endpoint,
+    logininfo.status
+  ];
+
+  try {
+    return await query(queryStr, values);
+  } catch (error) {
+    console.error("Error adding login info to the database", error);
+  }
+};
+
+const getLog = async () => {
+  return await query("SELECT * FROM requestInfo");
+};
+
 module.exports = {
   findOne,
   findAll,
   addNew,
   updateMovie,
-  deleteMovie
+  deleteMovie,
+  addLog,
+  getLog
 };

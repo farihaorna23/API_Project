@@ -1,5 +1,5 @@
-const dotenv = require("dotenv");
-const mysql = require("mysql");
+const dotenv = require("dotenv"); //to load enviroment variables from the .env file. importing modules.
+const mysql = require("mysql"); //to interact mysql database
 //ensuring that enviroment variable from env file are loaded
 const envFound = dotenv.config();
 

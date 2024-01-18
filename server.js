@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const router = require("./server/routes.js");
+const { addLog } = require("./server/query");
 
 const app = express();
 
@@ -9,6 +10,28 @@ app.use(express.json());
 
 //middleware for logging HTTP request and their methods
 app.use(morgan("dev"));
+
+//would retrive all the log information of all the upcoming request and send it to the database to be added
+app.use(async (req, res, next) => {
+  try {
+    const time = new Date();
+
+    res.on("finish", async () => {
+      const logininfo = {
+        timeStamp: time,
+        method: req.method,
+        endpoint: req.originalUrl,
+        status: res.statusCode
+      };
+
+      await addLog(logininfo);
+    });
+    next(); //very important to pass control to the next middleware
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 app.use("/movies", router);
 
